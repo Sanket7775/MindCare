@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Mind-Care</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Medilab
+  * Template URL: https://bootstrapmade.com/medilab-free-medical-bootstrap-theme/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header sticky-top">
+
+    
+    <div class="branding d-flex align-items-center">
+
+      <div class="container position-relative d-flex align-items-center justify-content-between">
+        <a href="index.html" class="logo d-flex align-items-center me-auto">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <!-- <img src="assets/img/logo.png" alt=""> -->
+          <h1 class="sitename">MIND CARE</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="index.html" >Home<br></a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Service.html">Services</a></li>
+            <li><a href="FAQ.html">FAQ'S</a></li>
+            <li><a href="Experts.html">Experts</a></li>
+           
+            <li><a href="Contact.html" >Contact</a></li>
+            <a class="cta-btn d-none d-sm-block" href="chatbot.html"><i class="bi bi-robot">YOUR-BOT</i></a>
+
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+
+        <a class="cta-btn d-none d-sm-block" href="Appointment.html">Make an Appointment</a>
+        <a class="cta-btn d-none d-sm-block" href="Signup.html">Sign Up</a>
+
+
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <section style="font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+    <div id="chat-container" style="width: 400px; height: 600px; border-radius: 10px; background-color: #fff; display: flex; flex-direction: column; padding: 20px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);">
+      <div id="chat-box" style="flex-grow: 1; overflow-y: auto; margin-bottom: 20px;"></div>
+      <div id="input-area" style="display: flex;">
+        <input id="user-input" type="text" placeholder="Type your message here..." style="flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-right: 10px;">
+    <button onclick="sendMessage()" style="padding: 10px; background-color: #007bff; border: none; border-radius: 5px; color: white; cursor: pointer;">Send</button>
+    <button onclick="showDoctorList()" style="padding: 10px; background-color: #007bff; color: white; border-radius: 50%; border: none; cursor: pointer;">➤</button>
+  </div>
+</div>
+
+<script>
+  const doctors = [
+    { name: "Dr. Ananya Shah", specialization: "Stress and Anxiety Specialist", experience: "10 years", contact: "ananya.shah@example.com" },
+    { name: "Dr. Raghav Gupta", specialization: "Work-Life Balance Counselor", experience: "8 years", contact: "raghav.gupta@example.com" },
+    { name: "Dr. Priya Mehta", specialization: "Mindfulness and Relaxation Expert", experience: "12 years", contact: "priya.mehta@example.com" }
+  ];
+  let conversationHistory = [];
+  let selectedDoctor = null;
+
+  const empatheticReplies = [
+    "I see. Can you tell me more about how you’re feeling?",
+    "That sounds challenging. What’s been the most difficult part for you?",
+    "I’m here to help. Could you explain a bit more about this situation?",
+    "It’s great that you’re opening up. How do you feel this is affecting your day-to-day life?",
+    "Thank you for sharing. Could you tell me how long this has been troubling you?",
+    "That must be tough. What kind of support do you think would help?"
+  ];
+
+  function botReply(message) {
+    const chatBox = document.getElementById('chat-box');
+    const botMessage = document.createElement('div');
+    botMessage.style.marginBottom = "15px";
+    botMessage.innerHTML = `<p style="padding: 10px; background-color: #d1d8e0; border-radius: 10px; max-width: 75%;">${message}</p>`;
+    chatBox.appendChild(botMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function userReply(message) {
+    const chatBox = document.getElementById('chat-box');
+    const userMessage = document.createElement('div');
+    userMessage.style.marginBottom = "15px";
+    userMessage.innerHTML = `<p style="padding: 10px; background-color: #e2f3f5; border-radius: 10px; max-width: 75%; align-self: flex-end;">${message}</p>`;
+    chatBox.appendChild(userMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function sendMessage() {
+    const userInput = document.getElementById('user-input').value.trim();
+    if (userInput) {
+      userReply(userInput);
+      processUserInput(userInput);
+      document.getElementById('user-input').value = '';
+    }
+  }
+
+  function processUserInput(input) {
+    conversationHistory.push(input);
+    const randomReply = empatheticReplies[Math.floor(Math.random() * empatheticReplies.length)];
+    botReply(randomReply);
+  }
+
+  function showDoctorList() {
+    const chatBox = document.getElementById('chat-box');
+    botReply("Here is the list of available doctors:");
+    doctors.forEach((doctor, index) => {
+      const button = document.createElement('button');
+      button.style = "background-color: #28a745; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin: 5px 0;";
+      button.innerText = doctor.name;
+      button.onclick = () => showDoctorDetails(index);
+      chatBox.appendChild(button);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function showDoctorDetails(index) {
+    selectedDoctor = doctors[index];
+    const chatBox = document.getElementById('chat-box');
+    const card = document.createElement('div');
+    card.style = "border: 1px solid #ccc; border-radius: 10px; padding: 10px; margin-bottom: 10px; text-align: left;";
+    card.innerHTML = `
+      <h3 style="margin: 0; font-size: 18px;">${selectedDoctor.name}</h3>
+      <p><strong>Specialization:</strong> ${selectedDoctor.specialization}</p>
+      <p><strong>Experience:</strong> ${selectedDoctor.experience}</p>
+      <p><strong>Contact:</strong> ${selectedDoctor.contact}</p>
+      <button onclick="sendAppointmentRequest()" style="background-color: #007bff; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">Book Appointment</button>
+    `;
+    chatBox.appendChild(card);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+  
+  function sendAppointmentRequest() {
+    const summary = conversationHistory.join(" ");
+    botReply(`Chat summary: "${summary}"`);
+    botReply(`Your appointment request has been sent to ${selectedDoctor.name}.`);
+  }
+</script>
+</section>
+
+<footer id="footer" class="footer light-background">
+  
+  <div class="container footer-top">
+    <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Mindcare</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Nashik , Malegaon </p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+            <p><strong>Email:</strong> <span>Mind-Care@example.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Our Services:</h4>
+          <ul>
+            <li><a href="#">Online Therapy            </a></li>
+            <li><a href="#">Mental Health Resources</a></li>
+            <li><a href="#"> Chatbot Support            </a></li>
+            <li><a href="#">Workshops and Webinars
+            </a></li>
+            <li><a href="#">Community Support Groups
+            </a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Additional Resources:</h4>
+          <ul>
+            <li><a href="#">Mental Health Blog</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Support Hotline
+            </a></li>
+            <li><a href="#">Feedback Form
+            </a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Mindcare</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">Mindcare</a>
+      </div>
+    </div>
+    
+  </footer>
+  
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  
+  <!-- Preloader -->
+  <div id="preloader"></div>
+  
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

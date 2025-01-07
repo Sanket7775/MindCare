@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIND CARE - Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #chat-container {
+      width: 400px;
+      height: 600px;
+      border-radius: 10px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    #chat-box {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    .message {
+      margin-bottom: 15px;
+    }
+    .user-message p, .bot-message p {
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 75%;
+    }
+    .user-message p {
+      background-color: #e2f3f5;
+      align-self: flex-end;
+    }
+    .bot-message p {
+      background-color: #d1d8e0;
+    }
+    #input-area {
+      display: flex;
+    }
+    #input-area input {
+      flex-grow: 1;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
+    }
+    #input-area button {
+      padding: 10px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    .doctor-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+    }
+    .doctor-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .doctor-card h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .doctor-card p {
+      margin: 5px 0;
+    }
+    .send-arrow {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chat-container">
+  <div id="chat-box"></div>
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Type your message here..." />
+    <button onclick="sendMessage()">Send</button>
+    <button class="send-arrow" onclick="showDoctorList()">➤</button>
+  </div>
+</div>
+
+<script>
+  const doctors = [
+    {
+      name: "Dr. Ananya Shah",
+      specialization: "Stress and Anxiety Specialist",
+      experience: "10 years",
+      contact: "ananya.shah@example.com"
+    },
+    {
+      name: "Dr. Raghav Gupta",
+      specialization: "Work-Life Balance Counselor",
+      experience: "8 years",
+      contact: "raghav.gupta@example.com"
+    },
+    {
+      name: "Dr. Priya Mehta",
+      specialization: "Mindfulness and Relaxation Expert",
+      experience: "12 years",
+      contact: "priya.mehta@example.com"
+    }
+  ];
+  let conversationHistory = [];
+  let selectedDoctor = null;
+
+  const empatheticReplies = [
+    "I see. Can you tell me more about how you’re feeling?",
+    "That sounds challenging. What’s been the most difficult part for you?",
+    "I’m here to help. Could you explain a bit more about this situation?",
+    "It’s great that you’re opening up. How do you feel this is affecting your day-to-day life?",
+    "Thank you for sharing. Could you tell me how long this has been troubling you?",
+    "That must be tough. What kind of support do you think would help?"
+  ];
+
+  function botReply(message) {
+    const chatBox = document.getElementById('chat-box');
+    const botMessage = document.createElement('div');
+    botMessage.classList.add('bot-message');
+    botMessage.innerHTML = `<p>${message}</p>`;
+    chatBox.appendChild(botMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function userReply(message) {
+    const chatBox = document.getElementById('chat-box');
+    const userMessage = document.createElement('div');
+    userMessage.classList.add('user-message');
+    userMessage.innerHTML = `<p>${message}</p>`;
+    chatBox.appendChild(userMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function sendMessage() {
+    const userInput = document.getElementById('user-input').value.trim();
+    if (userInput) {
+      userReply(userInput);
+      processUserInput(userInput);
+      document.getElementById('user-input').value = '';
+    }
+  }
+
+  function processUserInput(input) {
+    conversationHistory.push(input);
+    const randomReply = empatheticReplies[Math.floor(Math.random() * empatheticReplies.length)];
+    botReply(randomReply);
+  }
+
+  function showDoctorList() {
+    const chatBox = document.getElementById('chat-box');
+    botReply("Here is the list of available doctors:");
+    doctors.forEach((doctor, index) => {
+      const button = document.createElement('button');
+      button.classList.add('doctor-button');
+      button.innerText = doctor.name;
+      button.onclick = () => showDoctorDetails(index);
+      chatBox.appendChild(button);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function showDoctorDetails(index) {
+    selectedDoctor = doctors[index];
+    const chatBox = document.getElementById('chat-box');
+    const card = document.createElement('div');
+    card.classList.add('doctor-card');
+    card.innerHTML = `
+      <h3>${selectedDoctor.name}</h3>
+      <p><strong>Specialization:</strong> ${selectedDoctor.specialization}</p>
+      <p><strong>Experience:</strong> ${selectedDoctor.experience}</p>
+      <p><strong>Contact:</strong> ${selectedDoctor.contact}</p>
+      <button class="send-arrow" onclick="sendAppointmentRequest()">➤</button>
+    `;
+    chatBox.appendChild(card);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function sendAppointmentRequest() {
+    const summary = conversationHistory.join(" ");
+    botReply(`Chat summary: "${summary}"`);
+    botReply(`Your appointment request has been sent to ${selectedDoctor.name}.`);
+  }
+</script>
+
+</body>
+</html>
